@@ -4,15 +4,15 @@ local data = { percent = 0, status = "unknown" }
 
 local config = {
     warning_threshold = noctalia.getSetting("battery.warning_threshold") or 10,
-    layout = noctalia.getConfig("layout"),
-    show_glyph = noctalia.getConfig("show_glyph"),
-    show_label = noctalia.getConfig("show_label"),
-    label_content = noctalia.getConfig("label_content"),
-    hide_plugged = noctalia.getConfig("hide_plugged"),
-    hide_full = noctalia.getConfig("hide_full"),
-    color = noctalia.getConfig("color"),
-    warning_color = noctalia.getConfig("warning_color"),
-    charging_color = noctalia.getConfig("charging_color"),
+    layout = noctalia.getConfig("layout") or "horizontal",
+    show_glyph = noctalia.getConfig("show_glyph") or true,
+    show_label = noctalia.getConfig("show_label") or true,
+    label_content = noctalia.getConfig("label_content") or "percent",
+    hide_plugged = noctalia.getConfig("hide_plugged") or false,
+    hide_full = noctalia.getConfig("hide_full") or false,
+    color = noctalia.getConfig("color") or "on_surface",
+    warning_color = noctalia.getConfig("warning_color") or "error",
+    charging_color = noctalia.getConfig("charging_color") or "on_surface",
 }
 
 local path = "/sys/class/power_supply/"
@@ -76,12 +76,12 @@ local function parse(output)
 end
 
 local function getBatName()
-    local config = noctalia.getConfig("battery")
+    local config = noctalia.getConfig("battery") or "auto"
 
     if config == "bat0" then
         return "BAT0"
     elseif config == "custom" then
-        return noctalia.getConfig("battery_name")
+        return noctalia.getConfig("battery_name") or "BAT0"
     end
 
     local folders = noctalia.listDir(path)
