@@ -3,7 +3,7 @@ local color
 local data = { percent = 0, status = "unknown" }
 
 local label_content = noctalia.getConfig("label_content")
-local warning_threshold = 10
+local warning_threshold = noctalia.getSetting("battery.warning_threshold") or 10
 
 local path = "/sys/class/power_supply/"
 local batName
@@ -100,32 +100,6 @@ local function getGlyph()
         or data.percent >= 10 and "battery-1"
         or "battery-0"
     end
-end
-
-local function getWarningThreshold()
-    noctalia.runAsync(
-        "grep warning_threshold ~/.local/state/noctalia/settings.toml | awk '{print $3}'",
-        function(result)
-            if result.exitCode ~= 0 then
-                noctalia.log("battery-widget: failed to get warning_threshold: " .. result.stderr)
-                return
-            end
-
-            local res = result.stdout
-
-            if not res then
-                noctalia.log("battery-widget: invalid warning_threshold, keeping default")
-                return
-            end
-
-            local parsed = tonumber(noctalia.string.trim(res))
-            if parsed then
-                warning_threshold = parsed
-            else
-                noctalia.log("battery-widget: invalid warning_threshold, keeping default")
-            end
-        end
-    )
 end
 
 local function getColor()
@@ -270,8 +244,6 @@ if not batName then
     notifyError()
     return
 end
-
-getWarningThreshold()
 
 initData()
 watchBattery()
