@@ -6,7 +6,7 @@ author = "yocraft"
 license = "MIT"
 deprecated = false
 icon = "battery"
-description = "Desktop/Lockscreen widget to show battery."
+description = "Desktop/Lockscreen widget that displays battery level, status, charging rate, and time remaining."
 tags = [ "desktop", "hardware", "system", "utility" ]
 dependencies = [ "upower", "gdbus" ]
 
