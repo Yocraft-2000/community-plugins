@@ -225,10 +225,10 @@ end
 
 local function watchBattery()
     local patterns = { "Percentage", "State" }
-    if label_content == "time" then
+    if config.label_content == "time" then
         table.insert(patterns, "TimeToEmpty")
         table.insert(patterns, "TimeToFull")
-    elseif label_content == "rate" then
+    elseif config.label_content == "rate" then
         table.insert(patterns, "EnergyRate")
     end
 
