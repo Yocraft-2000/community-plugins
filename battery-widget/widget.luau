@@ -2,17 +2,26 @@ local glyph
 local color
 local data = { percent = 0, status = "unknown" }
 
+local function getConf(key, default)
+    local value = noctalia.getConfig(key)
+    if value == nil then
+        return default
+    else
+        return value
+    end
+end
+
 local config = {
     warning_threshold = noctalia.getSetting("battery.warning_threshold") or 10,
-    layout = noctalia.getConfig("layout") or "horizontal",
-    show_glyph = noctalia.getConfig("show_glyph") or true,
-    show_label = noctalia.getConfig("show_label") or true,
-    label_content = noctalia.getConfig("label_content") or "percent",
-    hide_plugged = noctalia.getConfig("hide_plugged") or false,
-    hide_full = noctalia.getConfig("hide_full") or false,
-    color = noctalia.getConfig("color") or "on_surface",
-    warning_color = noctalia.getConfig("warning_color") or "error",
-    charging_color = noctalia.getConfig("charging_color") or "on_surface",
+    layout = getConf("layout", "horizontal"),
+    show_glyph = getConf("show_glyph", true),
+    show_label = getConf("show_label", true),
+    label_content = getConf("label_content", "percent"),
+    hide_plugged = getConf("hide_plugged", false),
+    hide_full = getConf("hide_full", false),
+    color = getConf("color", "on_surface"),
+    warning_color = getConf("warning_color", "error"),
+    charging_color = getConf("charging_color", "on_surface"),
 }
 
 local path = "/sys/class/power_supply/"
@@ -43,8 +52,6 @@ if not noctalia.commandExists("gdbus") then
 end
 
 local function parse(output)
-    data = data or {}
-
     local percent = output:match("'Percentage':%s*<([%d%.]+)>")
     if percent then
         data.percent = tonumber(percent) or 0
