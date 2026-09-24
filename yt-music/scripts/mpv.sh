@@ -69,7 +69,7 @@ mpv_play() {   # $1=volume $2=url_file $3=title_file $4=cover_file(optional)
   rm -f "$SOCK"
   # 9>&-: mpv must not inherit the lock fd, or the lock would outlive this
   # script (held open by the playing mpv) and deadlock the next play.
-  nohup mpv "$URL" --no-video --vo=null --vd=null --audio-display=no --no-osc --no-osd-bar \
+  nohup mpv "$URL" --no-config --no-video --vo=null --vd=null --audio-display=no --no-osc --no-osd-bar \
     --demuxer-max-bytes=20M --demuxer-readahead-secs=60 --really-quiet --no-terminal \
     --keep-open=yes --pause=no \
     --force-media-title="$TITLE" \

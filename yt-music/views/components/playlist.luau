@@ -28,9 +28,10 @@ local function playlist_row(item, idx)
 			state.open_playlist(item)
 		end,
 		onHover = "onTrackHover",
+		radius = 12 * theme.corner_radius_scale,
 	}, {
 		thumb,
-		ui.column({ gap = 2, flexGrow = 1 }, {
+		ui.column({ gap = 2, flexGrow = 1, radius = 12 * theme.corner_radius_scale }, {
 			ui.label({
 				text = item.title or "Unknown Playlist",
 				fontSize = theme.fontTitle,
@@ -94,8 +95,8 @@ local function build_playlist_view()
 
 	table.insert(
 		child,
-		ui.row({ key = "pl-header", align = "center", justify = "space_between" }, {
-			ui.row({ key = "pl-title-row", align = "center", gap = 10 }, {
+		ui.row({ key = "pl-header", align = "center", justify = "space_between", radius = 12 * theme.corner_radius_scale }, {
+			ui.row({ key = "pl-title-row", align = "center", gap = 10, radius = 12 * theme.corner_radius_scale }, {
 				ui.label({
 					text = pl.title or "Playlist",
 					fontSize = theme.fontHero,
@@ -103,8 +104,8 @@ local function build_playlist_view()
 					color = "on_surface",
 				}),
 			}),
-			ui.row({ gap = 8, align = "center" }, {
-				ui.column({ key = "pl-count-col", gap = 1, align = "end" }, {
+			ui.row({ gap = 8, align = "center", radius = 12 * theme.corner_radius_scale }, {
+				ui.column({ key = "pl-count-col", gap = 1, align = "end", radius = 12 * theme.corner_radius_scale }, {
 					ui.label({
 						key = "pl-downloaded-label",
 						text = downloaded_count .. " downloaded",
@@ -146,7 +147,7 @@ local function build_playlist_view()
 		})
 	)
 
-	table.insert(child, ui.row({ key = "spacer-pl-1", height = 8, borderWidth = 0 }))
+	table.insert(child, ui.row({ key = "spacer-pl-1", height = 8, borderWidth = 0, radius = 12 * theme.corner_radius_scale }))
 
 	local total = #pl.tracks
 	local total_pages = math.max(1, math.ceil(total / PAGE_SIZE))
@@ -269,6 +270,7 @@ local function build_playlist_view()
 				gap = 12,
 				padding = 10,
 				borderWidth = 0,
+				radius = 12 * theme.corner_radius_scale,
 			}, page_controls)
 		)
 	end
@@ -277,7 +279,7 @@ local function build_playlist_view()
 	-- clicking a row plays it now while the rest of the queue continues.
 	local sugg = pl.suggestions or {}
 	if #sugg > 0 then
-		table.insert(tracks, ui.row({ key = "spacer-suggestions", height = 6, borderWidth = 0 }))
+		table.insert(tracks, ui.row({ key = "spacer-suggestions", height = 6, borderWidth = 0, radius = 12 * theme.corner_radius_scale }))
 		table.insert(tracks, ui.separator({ key = "sep-suggestions", color = "outline/0.3" }))
 		table.insert(
 			tracks,
@@ -298,7 +300,7 @@ local function build_playlist_view()
 		end
 	end
 
-	table.insert(child, ui.column({ key = "pl-track-list", gap = 0, borderWidth = 0 }, tracks))
+	table.insert(child, ui.column({ key = "pl-track-list", gap = 0, borderWidth = 0, radius = 12 * theme.corner_radius_scale }, tracks))
 
 	return child
 end

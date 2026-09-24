@@ -2,6 +2,8 @@ local STATE = "yt_music.state"
 local theme = require("./utils/theme.luau")
 local request = require("./views/actions.luau")
 
+theme.corner_radius_scale = noctalia.getSetting("shell.corner_radius_scale") or 1.0
+
 local state = {
     online = true,
     status = "idle",
@@ -60,7 +62,8 @@ local function render_mini()
             justify = "center",
             gap = 16,
             padding = 24,
-            flexGrow = 1
+            flexGrow = 1,
+            radius = 12 * theme.corner_radius_scale
         }, {
             ui.glyph({ name = "user-x", size = 48, color = "on_surface_variant/0.5" }),
             ui.label({ text = "Not Logged In", fontSize = theme.fontHeading, fontWeight = "bold", color = "on_surface" }),
@@ -97,7 +100,8 @@ local function render_mini()
             path = player.thumb_path,
             width = 170,
             height = 170,
-            fit = "cover"
+            fit = "cover",
+            radius = 12 * theme.corner_radius_scale
         })
     else
         player_thumb = ui.row({
@@ -106,7 +110,8 @@ local function render_mini()
             align = "center",
             justify = "center",
             fill = "surface_variant/0.25",
-            borderWidth = 0
+            borderWidth = 0,
+            radius = 12 * theme.corner_radius_scale
         }, {
             ui.glyph({ name = "music", size = 48, color = is_playing and "primary" or "on_surface_variant" })
         })
@@ -121,10 +126,11 @@ local function render_mini()
         padding = 6,
         fill = "surface_variant/0.15",
         borderWidth = 0,
-        width = "fill"
+        width = "fill",
+        radius = 12 * theme.corner_radius_scale
     }, {
         player_thumb,
-        ui.column({ align = "center", gap = 4, width = "fill" }, {
+        ui.column({ align = "center", gap = 4, width = "fill", radius = 12 * theme.corner_radius_scale }, {
             ui.label({
                 key = "mini-title",
                 text = track_title,
@@ -135,7 +141,7 @@ local function render_mini()
                 width = "fill",
                 textAlign = "center"
             }),
-            ui.column({ key = "mini-artist-wrap", align = "center", gap = 8, width = "fill" }, {
+            ui.column({ key = "mini-artist-wrap", align = "center", gap = 8, width = "fill", radius = 12 * theme.corner_radius_scale }, {
                 ui.label({
                     key = "mini-artist",
                     text = track_artist,
@@ -145,7 +151,7 @@ local function render_mini()
                     width = "fill",
                     textAlign = "center"
                 }),
-                ui.row({ key = "mini-title-actions", align = "center", justify = "center", gap = 4 }, {
+                ui.row({ key = "mini-title-actions", align = "center", justify = "center", gap = 4, radius = 12 * theme.corner_radius_scale }, {
                 (function()
                     local is_liked = (state.liked_ids and player.id and state.liked_ids[player.id] == true)
                     return icon_btn("heart", function()
@@ -176,8 +182,8 @@ local function render_mini()
     })
 
     -- Progress Scrub Bar
-    local scrub_row = ui.column({ key = "mini-scrub-col", gap = 4, width = "fill" }, {
-        ui.row({ key = "mini-scrub-labels", align = "center", justify = "space_between", width = "fill" }, {
+    local scrub_row = ui.column({ key = "mini-scrub-col", gap = 4, width = "fill", radius = 12 * theme.corner_radius_scale }, {
+        ui.row({ key = "mini-scrub-labels", align = "center", justify = "space_between", width = "fill", radius = 12 * theme.corner_radius_scale }, {
             ui.label({ key = "mini-pos-label", text = fmt_time(slider_val), fontSize = theme.fontCaption, color = "on_surface_variant" }),
             ui.label({ key = "mini-dur-label", text = fmt_time(duration), fontSize = theme.fontCaption, color = "on_surface_variant" })
         }),
@@ -213,7 +219,7 @@ local function render_mini()
     local is_loading = (player.status == "loading")
     local play_glyph = is_loading and "loader" or (is_playing and "player-pause" or "player-play")
 
-    local controls_row = ui.row({ key = "mini-controls", align = "center", justify = "center", gap = 12, width = "fill" }, {
+    local controls_row = ui.row({ key = "mini-controls", align = "center", justify = "center", gap = 12, width = "fill", radius = 12 * theme.corner_radius_scale }, {
         icon_btn("arrows-shuffle", function() request("toggle_shuffle") end, shuffle_active),
         icon_btn("player-skip-back", function() request("prev") end),
         ui.button({
@@ -255,13 +261,14 @@ local function render_mini()
         end
     }))
 
-    local footer_row = ui.row({ key = "mini-footer", align = "center", justify = "end", width = "fill", gap = 8 }, footer_children)
+    local footer_row = ui.row({ key = "mini-footer", align = "center", justify = "end", width = "fill", gap = 8, radius = 12 * theme.corner_radius_scale }, footer_children)
 
     panel.render(ui.column({
         key = "mini-root",
         gap = 14,
         padding = 16,
-        flexGrow = 1
+        flexGrow = 1,
+        radius = 12 * theme.corner_radius_scale
     }, {
         cover_card,
         scrub_row,
@@ -292,6 +299,7 @@ local function apply_state(s)
 end
 
 function onOpen(_context)
+    theme.corner_radius_scale = noctalia.getSetting("shell.corner_radius_scale") or 1.0
     local curr = noctalia.state.get(STATE)
     if curr then apply_state(curr) end
 end
