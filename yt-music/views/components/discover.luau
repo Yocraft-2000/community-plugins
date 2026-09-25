@@ -11,8 +11,8 @@ local function build_discover()
 
 	table.insert(
 		view,
-		ui.row({ key = "discover-title", align = "center", justify = "space_between", radius = 12 * theme.corner_radius_scale }, {
-			ui.column({ gap = 4, radius = 12 * theme.corner_radius_scale }, {
+		ui.row({ key = "discover-title", align = "center", justify = "space_between", radius = theme.radius }, {
+			ui.column({ gap = 4, radius = theme.radius }, {
 				ui.label({ text = "SEARCH RESULTS", fontSize = theme.fontHero, fontWeight = "bold", color = "on_surface" }),
 				ui.label({
 					text = s.query ~= "" and ('"' .. s.query .. '"') or "Search songs, albums, artists, or playlists",
@@ -22,7 +22,7 @@ local function build_discover()
 			}),
 		})
 	)
-	table.insert(view, ui.row({ key = "spacer-disc-1", height = 8, borderWidth = 0, radius = 12 * theme.corner_radius_scale }))
+	table.insert(view, ui.row({ key = "spacer-disc-1", height = 8, borderWidth = 0, radius = theme.radius }))
 
 	-- Search type filter chips (Top, Songs, Playlists, Albums, Artists)
 	local chips = {
@@ -51,7 +51,7 @@ local function build_discover()
 				onClick = function()
 					state.on_toggle_search_type(c.id)
 				end,
-				radius = 12 * theme.corner_radius_scale,
+				radius = theme.radius,
 			}, {
 				ui.label({
 					text = c.label,
@@ -62,8 +62,8 @@ local function build_discover()
 			})
 		)
 	end
-	table.insert(view, ui.row({ key = "search-chips-row", align = "center", gap = 8, radius = 12 * theme.corner_radius_scale }, chip_elems))
-	table.insert(view, ui.row({ key = "spacer-disc-2", height = 14, borderWidth = 0, radius = 12 * theme.corner_radius_scale }))
+	table.insert(view, ui.row({ key = "search-chips-row", align = "center", gap = 8, radius = theme.radius }, chip_elems))
+	table.insert(view, ui.row({ key = "spacer-disc-2", height = 14, borderWidth = 0, radius = theme.radius }))
 
 	local rows = {}
 	if s.pending then
@@ -106,7 +106,7 @@ local function build_discover()
 							state.open_artist(t)
 						end,
 						onHover = "onTrackHover",
-						radius = 12 * theme.corner_radius_scale,
+						radius = theme.radius,
 					}, {
 						common.thumb_or_placeholder(
 							t.thumb_path,
@@ -116,7 +116,7 @@ local function build_discover()
 							is_hovered and "primary" or "on_surface_variant",
 							is_hero and "primary/0.15" or nil
 						),
-						ui.column({ gap = 2, flexGrow = 1, radius = 12 * theme.corner_radius_scale }, {
+						ui.column({ gap = 2, flexGrow = 1, radius = theme.radius }, {
 							ui.label({
 								text = t.title or "Artist",
 								fontSize = is_hero and theme.fontHeading or theme.fontTitle,
@@ -143,7 +143,7 @@ local function build_discover()
 		end
 	end
 
-	table.insert(view, ui.column({ key = "discover-track-list", gap = 0, borderWidth = 0, radius = 12 * theme.corner_radius_scale }, rows))
+	table.insert(view, ui.column({ key = "discover-track-list", gap = 0, borderWidth = 0, radius = theme.radius }, rows))
 
 	return view
 end
