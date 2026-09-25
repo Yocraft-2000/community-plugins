@@ -5,6 +5,8 @@
 ### Added
 - **Shell corner radius scale**: every panel and mini-player surface now follows the shell's `shell.corner_radius_scale` setting via `theme.radius` (default 12 * scale), re-read each time a panel opens.
 
+## [0.2.8] - 2026-09-24
+
 ### Fixed
 - **Tracks starting paused**: mpv is now launched with `--pause=no` so songs starts playing immediately instead of being stuck in a paused state.
 
