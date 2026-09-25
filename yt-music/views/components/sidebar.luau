@@ -20,7 +20,7 @@ local function sidebar_row(key, icon, label, subtext, active, onClick, thumb_pat
 
     local icon_elem
     if thumb_path and common.file_exists_cached(thumb_path) then
-        icon_elem = ui.image({ path = thumb_path, width = 26, height = 26, fit = "cover" })
+        icon_elem = ui.image({ path = thumb_path, width = 26, height = 26, fit = "cover", radius = theme.radius })
     else
         icon_elem = ui.glyph({ name = icon, size = 17, color = glyph_color })
     end

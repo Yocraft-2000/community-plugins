@@ -41,7 +41,7 @@ end
 
 local function thumb_or_placeholder(path, size, glyph, glyph_size, color, fill)
 	if path and file_exists_cached(path) then
-		return ui.image({ path = path, width = size, height = size, fit = "cover" })
+		return ui.image({ path = path, width = size, height = size, fit = "cover", radius = theme.radius })
 	end
 	return ui.row({
 		width = size,
