@@ -30,4 +30,16 @@ function QueueOrder.follow(index, from, insert_at)
 	return cur
 end
 
+-- Removes entry `at`. Returns the entry, the new playing index and whether the
+-- playing entry was the one removed (the index then points at its successor).
+function QueueOrder.remove(list, at, index)
+	at = math.floor(tonumber(at) or 0)
+	if at < 1 or at > #list then
+		return nil
+	end
+	index = tonumber(index) or 0
+	local entry = table.remove(list, at)
+	return entry, at < index and index - 1 or index, at == index
+end
+
 return QueueOrder

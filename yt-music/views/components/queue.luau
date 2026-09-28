@@ -6,21 +6,34 @@ local rerender = require("../rerender.luau")
 local QueueOrder = require("../../utils/queueorder.luau")
 
 local DRAG_TYPE = "yt-music.queue.track"
+local TRASH = "trash"
 
-local function on_track_dropped(payload, value)
-    local from, to = tonumber(payload), tonumber(value)
-    if not from or not to then
-        return
-    end
-    local player = state.data.player
-    local insert_at = QueueOrder.move(player.queue, from, to)
-    if insert_at == nil then
-        return
-    end
-    player.index = QueueOrder.follow(player.index, from, insert_at)
+local function commit(action, payload)
     state.view.hover_key.track = nil
     rerender.call()
-    request("move_queue_item", { from = from, to = to })
+    request(action, payload)
+end
+
+local function on_track_dropped(payload, value)
+    local from = tonumber(payload)
+    local player = state.data.player
+    if not from then
+        return
+    end
+    if value == TRASH then
+        local entry, index = QueueOrder.remove(player.queue, from, player.index)
+        if entry ~= nil then
+            player.index = index
+            commit("remove_queue_item", { index = from })
+        end
+        return
+    end
+    local to = tonumber(value)
+    local insert_at = to and QueueOrder.move(player.queue, from, to)
+    if insert_at then
+        player.index = QueueOrder.follow(player.index, from, insert_at)
+        commit("move_queue_item", { from = from, to = to })
+    end
 end
 
 local function insertion_zone(slot)
@@ -51,6 +64,29 @@ local function build_queue()
 					text = #player.queue == 0 and "No tracks in queue" or (#player.queue .. " tracks in queue"),
 					fontSize = theme.fontTitle,
 					color = "on_surface_variant",
+				}),
+			}),
+			ui.dropZone({
+				key = "q-trash",
+				accepts = { DRAG_TYPE },
+				value = TRASH,
+				onDrop = "onQueueTrackDropped",
+				width = 48,
+				height = 48,
+				align = "center",
+				justify = "center",
+				radius = theme.radius,
+				fill = "surface_variant/0.3",
+			}, {
+				ui.row({
+					key = "q-trash-tip",
+					align = "center",
+					justify = "center",
+					width = 48,
+					height = 48,
+					tooltip = "Drag a track here to remove it from the queue",
+				}, {
+					ui.glyph({ name = "trash", size = 22, color = "on_surface_variant" }),
 				}),
 			}),
 		})
