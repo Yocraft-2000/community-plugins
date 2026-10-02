@@ -32,10 +32,8 @@ nc_check() {   # $1=sock $2=timeout
   printf '' | nc_send "$1" "$2" >/dev/null 2>&1
 }
 
-mpv_play() {   # $1=volume $2=url_file $3=title_file $4=cover_file(optional) $5=1 to start paused
+mpv_play() {   # $1=volume $2=url_file $3=title_file $4=cover_file(optional)
   local vol="${1:-100}"
-  local pause_opt=no
-  [ "$5" = 1 ] && pause_opt=yes
   # Feed mpv-mpris cover-art-files so system widgets get mpris:artUrl.
   local cover_opts=""
   [ -n "$4" ] && [ -f "$4" ] && cover_opts="--cover-art-file=$4"
@@ -73,7 +71,7 @@ mpv_play() {   # $1=volume $2=url_file $3=title_file $4=cover_file(optional) $5=
   # script (held open by the playing mpv) and deadlock the next play.
   nohup mpv "$URL" --no-video --vo=null --vd=null --audio-display=no --no-osc --no-osd-bar \
     --demuxer-max-bytes=20M --demuxer-readahead-secs=60 --really-quiet --no-terminal \
-    --keep-open=yes --pause=$pause_opt \
+    --keep-open=yes --pause=no \
     --force-media-title="$TITLE" \
     $cover_opts \
     --input-ipc-server="$SOCK" --ao=pulse,pipewire,alsa,auto \

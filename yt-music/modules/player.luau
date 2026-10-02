@@ -22,7 +22,6 @@ local original_queue = nil
 -- responses from earlier rapid clicks are recognised as stale and dropped
 -- instead of hijacking playback when they finally arrive.
 local play_generation = 0
-local paused_gen = -1 -- generation whose track must start paused
 local start_stream
 
 -- Coalesced manual skips: rapid next/prev presses accumulate into
@@ -61,8 +60,7 @@ local function player_set(item, stream_url)
 	state.player.thumb_path = item.thumb_path
 		or (api and api.get_thumbnail_path and api.get_thumbnail_path(item.id, thumb_url, nil) or nil)
 	state.player.duration = tonumber(item.duration) or 0
-	local paused = paused_gen == play_generation
-	state.player.status = paused and "paused" or "playing"
+	state.player.status = "playing"
 	state.player.position = 0
 	state.player.codec_fetched = false
 	state.player.bitrate = nil
@@ -106,7 +104,7 @@ local function player_set(item, stream_url)
 		if ready then
 			start_stream()
 		end
-	end, state.player.thumb_path, paused) -- cached art -> mpris:artUrl via mpv-mpris
+	end, state.player.thumb_path) -- cached art -> mpris:artUrl via mpv-mpris
 	-- Speculative work happens only for settled playback: the song that
 	-- actually starts earns its next-track prefetch and queue thumbnails.
 	-- Skipped-over intents never get here, so rapid skipping spawns nothing
@@ -611,38 +609,6 @@ function Player.move(from, to)
 	publish()
 end
 
-function Player.remove(at)
-	at = math.floor(tonumber(at) or 0)
-	local q = state.player.queue
-	local entry, index, was_current = QueueOrder.remove(q, at, state.player.index)
-	if entry == nil then
-		return
-	end
-	state.player.index = index
-	if original_queue then
-		for i, t in ipairs(original_queue) do
-			if t == entry then
-				table.remove(original_queue, i)
-				break
-			end
-		end
-	end
-	log("remove: " .. at .. "/" .. #q)
-	if not was_current then
-		publish()
-	elseif #q == 0 then
-		Player.stop()
-	else
-		local was_paused = state.player.status == "paused"
-		if was_paused then
-			paused_gen = play_generation + 1
-		end
-		Player.play_index(math.min(at, #q))
-		if play_generation ~= paused_gen then
-			paused_gen = -1
-		end
-	end
-end
 
 function Player.append_to_queue(track)
 	table.insert(state.player.queue, track)

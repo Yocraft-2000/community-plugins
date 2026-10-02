@@ -4,7 +4,6 @@
 
 ### Added
 - **Queue reordering**: drag a track by its grip to move it; the playing track keeps playing and follows its own place. A manual order also supersedes the pre-shuffle snapshot.
-- **Queue delete**: drop a track on the trash icon in the queue header to remove it. Removing the playing track starts the next one, and a paused player stays paused.
 
 ## [0.3.0] - 2026-09-25
 
