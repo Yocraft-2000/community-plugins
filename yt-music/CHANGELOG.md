@@ -5,6 +5,11 @@
 ### Added
 - **Queue reordering**: drag a track by its grip to move it; the playing track keeps playing and follows its own place. A manual order also supersedes the pre-shuffle snapshot.
 
+## [0.3.1] - 2026-09-28
+
+### Fixed
+- **Player bar artist fallback**: the subtitle line now shows `Unknown artist` when a track is loaded without artist metadata instead of `Pick something to play`.
+
 ## [0.3.0] - 2026-09-25
 
 ### Added
