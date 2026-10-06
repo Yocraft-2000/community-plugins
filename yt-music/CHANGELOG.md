@@ -1,10 +1,15 @@
 # Changelog
 
-## [0.3.2] - 2026-09-28
+## [0.3.3] - 2026-09-28
 
 ### Added
 - **Queue reordering**: drag a track by its grip to move it; the playing track keeps playing and follows its own place. A manual order also supersedes the pre-shuffle snapshot.
 
+## [0.3.2] - 2026-10-02
+
+### Added
+ - **Media widget transport**: Next/Previous now work in Noctalia's core media widget (and `playerctl`) while a track plays, advancing the same queue as the miniplayer and full panel.
+ 
 ## [0.3.1] - 2026-09-28
 
 ### Fixed
